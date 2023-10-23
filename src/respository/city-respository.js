@@ -1,5 +1,5 @@
 const { City } = require("../models/index.js");
-
+const {Op} = require("sequelize");
 class CityRepository {
   async createCity(name) {
     try {
@@ -11,18 +11,33 @@ class CityRepository {
       const city = await City.create({ name });
       return city;
     } catch (error) {
-      throw new Error("Error creating city: " + error.message);
+      console.log("Error creating city: " + error.message);
+      throw{error}
     }
   }
-  async getAllCities() {
+  async getAllCities(filter) {
     try {
+  
+      if(filter.name)
+      {
+        const cities= await City.findAll({
+          where:{
+            name:{
+                  [Op.startsWith]:filter.name
+            }
+          }
+        })
+
+        return cities;
+      }
       const cities = await City.findAll();
       if (cities.length < 1) {
         throw new Error("No city exists");
       }
       return cities;
     } catch (error) {
-      throw new Error("Error getting cities: " + error.message);
+      console.log("Error getting cities: " + error.message);
+      throw{error}
     }
   }
   async getCity( id ) {
@@ -34,7 +49,8 @@ class CityRepository {
       const city = await City.findOne({ where: { id } });
       return city;
     } catch (error) {
-      throw new Error("Error getting city: " + error.message);
+      console.log("Error getting city: " + error.message);
+      throw{error}
     }
   }
   async updateCity( id, name ) {
@@ -50,7 +66,8 @@ class CityRepository {
       //   return city;
       return isCityExist;
     } catch (error) {
-      throw new Error("Error updating city: " + error.message);
+      console.log("Error updating city: " + error.message);
+      throw{error}
     }
   }
 
@@ -59,7 +76,8 @@ class CityRepository {
       const city = await City.destroy({ where: { id } });
       return city;
     } catch (error) {
-      throw new Error("Error deleting city: " + error.message);
+      console.log("Error deleting city: " + error.message);
+      throw{error}
     }
   }
 }

@@ -12,9 +12,9 @@ class CityService {
       console.log("Error creating city: " + error.message);
     }
   }
-  async getAllCities() {
+  async getAllCities(filter) {
     try {
-      const cities = await this.cityRepository.getAllCities();
+      const cities = await this.cityRepository.getAllCities({name:filter.name});
       return cities;
     } catch (error) {
       console.log("Error getting cities: " + error.message);

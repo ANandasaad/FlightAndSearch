@@ -5,7 +5,6 @@ const CityService = require("../services/city-service.js");
 const create= async (req,res)=>{
     try {
         const {name}=req.body;
-        console.log(name);
          const city= await CityService.createCity(name);
          res.json({
              success:true,
@@ -14,6 +13,12 @@ const create= async (req,res)=>{
          })
     } catch (error) {
          console.log(error)
+         return res.status(500).json({
+            data:{},
+            success:false,
+            message:"Create city failed",
+            err:error
+         })
     }
 
 }
@@ -28,6 +33,12 @@ const destroy= async(req,res)=>{
         })
     } catch (error) {
         console.log(error)
+        return res.status(500).json({
+            data:{},
+            success:false,
+            message:"Create city failed",
+            err:error
+         })
     }
 
 }
@@ -44,12 +55,19 @@ const update= async (req,res)=>{
         })
     } catch (error) {
         console.log(error)
+        return res.status(500).json({
+            data:{},
+            success:false,
+            message:"Create city failed",
+            err:error
+         })
     }
 
 }
 const get= async (req,res)=>{
     try {
-        const getAll= await CityService.getAllCities();
+       
+        const getAll= await CityService.getAllCities(req.query);
         res.json({
             success:true,
             message:"Get all city successfully",
@@ -58,6 +76,12 @@ const get= async (req,res)=>{
         })
     } catch (error) {
         console.log(error)
+        return res.status(500).json({
+            data:{},
+            success:false,
+            message:"Create city failed",
+            err:error
+         })
     }
 
 }

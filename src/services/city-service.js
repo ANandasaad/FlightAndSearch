@@ -3,9 +3,10 @@ class CityService {
   constructor() {
     this.cityRepository = new CityRepository();
   }
-  async createCity() {
+  async createCity(name) {
     try {
-      const creates = await this.cityRepository.createCity({ name: "Hanoi" });
+      console.log(name)
+      const creates = await this.cityRepository.createCity( name);
       return creates;
     } catch (error) {
       console.log("Error creating city: " + error.message);
@@ -29,6 +30,7 @@ class CityService {
   }
   async updateCity(cityId, name) {
     try {
+      
       const city = await this.cityRepository.updateCity(cityId, name);
       return city;
     } catch (error) {
@@ -45,4 +47,4 @@ class CityService {
   }
 }
 
-module.exports = CityService;
+module.exports = new CityService();

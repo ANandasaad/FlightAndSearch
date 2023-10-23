@@ -1,8 +1,9 @@
 const { City } = require("../models/index.js");
 
 class CityRepository {
-  async createCity({ name }) {
+  async createCity(name) {
     try {
+      console.log(name);  
       const isCityExist = await City.findOne({ where: { name } });
       if (isCityExist) {
         throw new Error("City already exists");
@@ -24,7 +25,7 @@ class CityRepository {
       throw new Error("Error getting cities: " + error.message);
     }
   }
-  async getCity({ id }) {
+  async getCity( id ) {
     try {
       const isCityExist = await City.findOne({ where: { id } });
       if (!isCityExist) {
@@ -36,20 +37,24 @@ class CityRepository {
       throw new Error("Error getting city: " + error.message);
     }
   }
-  async updateCity({ id, name }) {
+  async updateCity( id, name ) {
     try {
+      console.log(id, name)
       const isCityExist = await City.findOne({ where: { id } });
       if (!isCityExist) {
         throw new Error("City does not exist");
       }
-      const city = await City.update({ name }, { where: { id } });
-      return city;
+      isCityExist.name = name;  
+      await isCityExist.save();
+      //  const city= await City.update({name},{where:{id}})
+      //   return city;
+      return isCityExist;
     } catch (error) {
       throw new Error("Error updating city: " + error.message);
     }
   }
 
-  async deleteCity({ id }) {
+  async deleteCity( id ) {
     try {
       const city = await City.destroy({ where: { id } });
       return city;

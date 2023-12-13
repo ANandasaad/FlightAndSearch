@@ -1,83 +1,69 @@
 const { City } = require("../models/index.js");
-const {Op} = require("sequelize");
+const { Op } = require("sequelize");
 class CityRepository {
-  async createCity(name) {
+  async createCity({ name }) {
     try {
-      console.log(name);  
-      const isCityExist = await City.findOne({ where: { name } });
-      if (isCityExist) {
-        throw new Error("City already exists");
-      }
       const city = await City.create({ name });
       return city;
     } catch (error) {
-      console.log("Error creating city: " + error.message);
-      throw{error}
+      console.log("Error creating city");
+      throw { error };
     }
   }
-  async getAllCities(filter) {
+  async deleteCity(cityId) {
     try {
-  
-      if(filter.name)
-      {
-        const cities= await City.findAll({
-          where:{
-            name:{
-                  [Op.startsWith]:filter.name
-            }
-          }
-        })
+      const deleteCity = await City.destroy({
+        where: {
+          id: cityId,
+        },
+      });
+    } catch (error) {
+      console.log("Error deleting city");
+      throw { error };
+    }
+  }
 
+  async updateCity(cityId, data) {
+    try {
+      const city = await City.update(data, {
+        where: {
+          id: cityId,
+        },
+      });
+      return city;
+    } catch (error) {
+      console.log("Error updating city");
+      throw { error };
+    }
+  }
+  async getCityById(cityId) {
+    try {
+      const city = await City.findByPk(cityId);
+      if (!city) throw new Error("No city found");
+      return city;
+    } catch (error) {
+      console.log("Error getting city");
+      throw { error };
+    }
+  }
+  async getAllCity(filter) {
+    try {
+      if (filter.name) {
+        const cities = await City.findAll({
+          where: {
+            name: {
+              [Op.startsWith]: filter.name,
+            },
+          },
+        });
         return cities;
       }
-      const cities = await City.findAll();
-      if (cities.length < 1) {
-        throw new Error("No city exists");
-      }
-      return cities;
-    } catch (error) {
-      console.log("Error getting cities: " + error.message);
-      throw{error}
-    }
-  }
-  async getCity( id ) {
-    try {
-      const isCityExist = await City.findOne({ where: { id } });
-      if (!isCityExist) {
-        throw new Error("City does not exist");
-      }
-      const city = await City.findOne({ where: { id } });
+      const city = await City.findAll();
+      if (!city.length) throw new Error("Cities is not found");
       return city;
     } catch (error) {
-      console.log("Error getting city: " + error.message);
-      throw{error}
-    }
-  }
-  async updateCity( id, name ) {
-    try {
-      console.log(id, name)
-      const isCityExist = await City.findOne({ where: { id } });
-      if (!isCityExist) {
-        throw new Error("City does not exist");
-      }
-      isCityExist.name = name;  
-      await isCityExist.save();
-      //  const city= await City.update({name},{where:{id}})
-      //   return city;
-      return isCityExist;
-    } catch (error) {
-      console.log("Error updating city: " + error.message);
-      throw{error}
-    }
-  }
-
-  async deleteCity( id ) {
-    try {
-      const city = await City.destroy({ where: { id } });
-      return city;
-    } catch (error) {
-      console.log("Error deleting city: " + error.message);
-      throw{error}
+      console.log("Error getting all cities");
+      throw { error };
     }
   }
 }

@@ -1,40 +1,16 @@
 const { CityRepository } = require("../respository/index.js");
+
 class CityService {
   constructor() {
     this.cityRepository = new CityRepository();
   }
-  async createCity(name) {
+  async createCity(data) {
     try {
-      console.log(name)
-      const creates = await this.cityRepository.createCity( name);
-      return creates;
-    } catch (error) {
-      console.log("Error creating city: " + error.message);
-    }
-  }
-  async getAllCities(filter) {
-    try {
-      const cities = await this.cityRepository.getAllCities({name:filter.name});
-      return cities;
-    } catch (error) {
-      console.log("Error getting cities: " + error.message);
-    }
-  }
-  async getCity(cityId) {
-    try {
-      const city = await this.cityRepository.getCity(cityId);
+      const city = await this.cityRepository.createCity(data);
       return city;
     } catch (error) {
-      console.log("Error getting city: " + error.message);
-    }
-  }
-  async updateCity(cityId, name) {
-    try {
-      
-      const city = await this.cityRepository.updateCity(cityId, name);
-      return city;
-    } catch (error) {
-      console.log("Error updating city: " + error.message);
+      console.log("Something went wrong while creating city");
+      throw { error };
     }
   }
   async deleteCity(cityId) {
@@ -42,9 +18,37 @@ class CityService {
       const city = await this.cityRepository.deleteCity(cityId);
       return city;
     } catch (error) {
-      console.log("Error deleting city: " + error.message);
+      console.log("Something went wrong while deleting city");
+      throw { error };
+    }
+  }
+  async getCities(filter) {
+    try {
+      const city = await this.cityRepository.getAllCity(filter);
+      return city;
+    } catch (error) {
+      console.log("Something went wrong while getting cities");
+      throw { error };
+    }
+  }
+  async update(cityId, data) {
+    try {
+      const city = await this.cityRepository.updateCity(cityId, data);
+      return city;
+    } catch (error) {
+      console.log("Something went wrong while updating cities");
+      throw { error };
+    }
+  }
+  async getCityByCityId(cityId) {
+    try {
+      const city = await this.cityRepository.getCityById(cityId);
+      return city;
+    } catch (error) {
+      console.log("Something went wrong while getting City by Id");
+      throw { error };
     }
   }
 }
 
-module.exports = new CityService();
+module.exports = CityService;

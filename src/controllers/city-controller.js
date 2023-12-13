@@ -1,94 +1,104 @@
+const { CityService } = require("../services/index.js");
 
-const CityService = require("../services/city-service.js");
+const cityService = new CityService();
+const create = async (req, res, next) => {
+  try {
+    const city = await cityService.createCity(req.body);
+    res.json({
+      success: true,
+      message: "City created successfully",
+      data: city,
+    });
+  } catch (error) {
+    console.log(error);
+    res.json({
+      success: false,
+      message: "Error creating city",
+      data: {},
+      err: error,
+    });
+  }
+};
 
+const deleteCity = async (req, res, next) => {
+  try {
+    const city = await cityService.deleteCity(req.params.cityId);
+    res.json({
+      success: true,
+      message: "City deleted successfully",
+      data: city,
+    });
+  } catch (error) {
+    console.log(error);
+    res.json({
+      success: false,
+      message: "Error deleting city",
+      data: {},
+      err: error,
+    });
+  }
+};
+const update = async (req, res, next) => {
+  try {
+    const city = await cityService.update(req.params.cityId, req.body);
+    res.json({
+      success: true,
+      message: "City updated successfully",
+      data: city,
+    });
+  } catch (error) {
+    console.log(error);
+    res.json({
+      success: false,
+      message: "Error updating city",
+      data: {},
+      err: error,
+    });
+  }
+};
 
-const create= async (req,res)=>{
-    try {
-        const {name}=req.body;
-         const city= await CityService.createCity(name);
-         res.json({
-             success:true,
-             message:"Create city successfully",
-             data:city
-         })
-    } catch (error) {
-         console.log(error)
-         return res.status(500).json({
-            data:{},
-            success:false,
-            message:"Create city failed",
-            err:error
-         })
-    }
+const getCityByCityId = async (req, res, next) => {
+  try {
+    console.log(req.params.cityId);
+    const city = await cityService.getCityByCityId(req.params.cityId);
+    res.json({
+      success: true,
+      message: "Get city by Id successfully",
+      data: city,
+    });
+  } catch (error) {
+    console.log(error);
+    res.json({
+      success: false,
+      message: "Error getting city",
+      data: {},
+      err: error,
+    });
+  }
+};
+const getCities = async (req, res, next) => {
+  try {
+    const cities = await cityService.getCities(req.query);
+    res.json({
+      success: true,
+      message: "Get cities successfully",
+      data: cities,
+    });
+  } catch (error) {
+    console.log(error);
+    res.json({
+      success: false,
+      message: "Error getting cities",
+      data: {},
+      err: error,
+    });
+  }
+};
 
-}
-
-const destroy= async(req,res)=>{
-    try {
-        const city=  await CityService.deleteCity(req.params.id);
-        res.json({
-            success:true,
-            message:"Delete city successfully",
-            data:city
-        })
-    } catch (error) {
-        console.log(error)
-        return res.status(500).json({
-            data:{},
-            success:false,
-            message:"Create city failed",
-            err:error
-         })
-    }
-
-}
-
-const update= async (req,res)=>{
-    try {
-        const {name}=req.body;
-        const {id}=req.params;
-        const update= await CityService.updateCity( id,name);
-        res.json({
-            success:true,
-            message:"Update city successfully",
-            data:update
-        })
-    } catch (error) {
-        console.log(error)
-        return res.status(500).json({
-            data:{},
-            success:false,
-            message:"Create city failed",
-            err:error
-         })
-    }
-
-}
-const get= async (req,res)=>{
-    try {
-       
-        const getAll= await CityService.getAllCities(req.query);
-        res.json({
-            success:true,
-            message:"Get all city successfully",
-            data:getAll
-        
-        })
-    } catch (error) {
-        console.log(error)
-        return res.status(500).json({
-            data:{},
-            success:false,
-            message:"Create city failed",
-            err:error
-         })
-    }
-
-}
-
-module.exports={
-    create,
-    destroy,
-    update,
-    get
-}
+module.exports = {
+  create,
+  deleteCity,
+  update,
+  getCityByCityId,
+  getCities,
+};

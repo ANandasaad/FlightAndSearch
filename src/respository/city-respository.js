@@ -17,6 +17,7 @@ class CityRepository {
           id: cityId,
         },
       });
+      return deleteCity;
     } catch (error) {
       console.log("Error deleting city");
       throw { error };

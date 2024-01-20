@@ -10,16 +10,33 @@ const create = async (req, res, next) => {
       data: city,
     });
   } catch (error) {
-    console.log(error);
     res.json({
       success: false,
       message: "Error creating city",
       data: {},
-      err: error,
+      err: error.error,
     });
   }
 };
+const bulkCreate = async (req, res, next) => {
+  try {
+    const data = req.body;
 
+    const response = await cityService.bulkCreateCity(data);
+    res.json({
+      success: true,
+      message: "Upload Cities data successfully",
+      data: response,
+    });
+  } catch (error) {
+    res.json({
+      success: false,
+      message: "Error creating cities",
+      data: {},
+      err: error.error,
+    });
+  }
+};
 const deleteCity = async (req, res, next) => {
   try {
     const city = await cityService.deleteCity(req.params.cityId);
@@ -29,7 +46,6 @@ const deleteCity = async (req, res, next) => {
       data: city,
     });
   } catch (error) {
-    console.log(error);
     res.json({
       success: false,
       message: "Error deleting city",
@@ -47,7 +63,6 @@ const update = async (req, res, next) => {
       data: city,
     });
   } catch (error) {
-    console.log(error);
     res.json({
       success: false,
       message: "Error updating city",
@@ -67,7 +82,6 @@ const getCityByCityId = async (req, res, next) => {
       data: city,
     });
   } catch (error) {
-    console.log(error);
     res.json({
       success: false,
       message: "Error getting city",
@@ -85,7 +99,6 @@ const getCities = async (req, res, next) => {
       data: cities,
     });
   } catch (error) {
-    console.log(error);
     res.json({
       success: false,
       message: "Error getting cities",
@@ -97,6 +110,7 @@ const getCities = async (req, res, next) => {
 
 module.exports = {
   create,
+  bulkCreate,
   deleteCity,
   update,
   getCityByCityId,

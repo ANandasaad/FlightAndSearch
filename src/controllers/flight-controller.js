@@ -39,7 +39,7 @@ const deleteFlight = async (req, res, next) => {
 };
 const getFlightById = async (req, res, next) => {
   try {
-    const response = await flightService.getFlightById(req.param.id);
+    const response = await flightService.getFlightById(req.params.id);
     res.json({
       success: true,
       message: "flight retrieved successfully",
@@ -72,10 +72,32 @@ const getAllFlight = async (req, res, next) => {
       err: error,
     });
   }
+ 
+};
+const update = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const data = req.body;
+    const response = await flightService.updateFlight(id, data);
+    res.json({
+      success: true,
+      message: "Updated Flight SuccessFully",
+      data: response,
+    });
+  } catch (error) {
+    console.log(error);
+    res.json({
+      success: false,
+      message: "Error while updating flight",
+      data: {},
+      err: error,
+    });
+  }
 };
 module.exports = {
   create,
   deleteFlight,
   getFlightById,
   getAllFlight,
+  update
 };

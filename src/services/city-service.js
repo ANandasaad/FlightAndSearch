@@ -13,6 +13,15 @@ class CityService {
       throw { error };
     }
   }
+  async bulkCreateCity(data) {
+    try {
+      const cities = await this.cityRepository.bulkCreateCity(data);
+      return cities;
+    } catch (error) {
+      console.log("Something went wrong while uploading cities");
+      throw { error };
+    }
+  }
   async deleteCity(cityId) {
     try {
       const city = await this.cityRepository.deleteCity(cityId);

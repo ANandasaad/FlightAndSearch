@@ -11,7 +11,7 @@ class FlightService {
 
   async createFlight(data) {
     try {
-      //   console.log(data);
+      console.log(data);
       if (!compareTime(data.arrivalTime, data.departureTime)) {
         throw { error: "Arrival time cannot be less than departure time" };
       }
@@ -56,9 +56,14 @@ class FlightService {
       throw { error };
     }
   }
-  async updateFlight() {
+  async updateFlight(id, data) {
     try {
-    } catch (error) {}
+      const flight= await this.flightRepository.updateFlight(id,data);
+      return flight;
+    } catch (error) {
+      console.log(error);
+      throw {error}
+    }
   }
 }
 

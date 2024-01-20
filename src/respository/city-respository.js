@@ -1,14 +1,33 @@
 const { City } = require("../models/index.js");
 const { Op } = require("sequelize");
+const { Conflict } = require("http-errors");
 class CityRepository {
   async createCity({ name }) {
     try {
+      const isCityAlreadyExists = await City.findOne({
+        where: {
+          name,
+        },
+      });
+      console.log(isCityAlreadyExists);
+      if (isCityAlreadyExists) throw new Conflict("City already exists");
       const city = await City.create({ name });
       return city;
     } catch (error) {
       console.log("Error creating city");
       throw { error };
     }
+  }
+  async bulkCreateCity(data) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const uploadBulkCities = await City.bulkCreate(data.cities);
+        return resolve(uploadBulkCities);
+      } catch (error) {
+        console.log("Error while uploading cities");
+        reject(error);
+      }
+    });
   }
   async deleteCity(cityId) {
     try {

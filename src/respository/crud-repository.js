@@ -21,9 +21,10 @@ class CrudRepository {
     try {
       const result = await this.model.update(data, {
         where: {
-          id: modelId,
+          id: modelId.id,
         },
       });
+
       return result;
     } catch (error) {
       console.log("Something went wrong in repository");
@@ -55,6 +56,17 @@ class CrudRepository {
   async getAll() {
     try {
       const result = await this.model.findAll();
+      return result;
+    } catch (error) {
+      console.log("Something went wrong in repository");
+      throw { error };
+    }
+  }
+  async deleteMany() {
+    try {
+      const result = await this.model.destroy({
+        where: {},
+      });
       return result;
     } catch (error) {
       console.log("Something went wrong in repository");

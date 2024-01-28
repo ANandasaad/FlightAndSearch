@@ -48,6 +48,15 @@ class CrudService {
       throw { error };
     }
   }
+  async deleteMany() {
+    try {
+      const response = await this.repository.deleteMany();
+      return response;
+    } catch (error) {
+      console.log("Something went wrong in deleting all the crud service");
+      throw { error };
+    }
+  }
 }
 
 module.exports = CrudService;
